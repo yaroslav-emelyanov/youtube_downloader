@@ -6,12 +6,12 @@ const router = Router()
 router.post('/login', (req, res) => {
    const { email, password } = req.body
     const sql = `SELECT password FROM users WHERE email = '${email}'`
-    pool.query(sql, (err, result) => {
+    db.get(sql, (err, result) => {
         if (err) console.log('err', err)
-        if(!result.length) {
+        if(!result) {
             res.json({status: 'error', message: 'User is not found'})
         } else {
-            const password_hash = result[0].password
+            const password_hash = result.password
             const isPasswordCorrected = bcrypt.compareSync(password, password_hash)
             if (!isPasswordCorrected) {
                 res.json({status: 'error', message: 'The username or password is incorrect'})

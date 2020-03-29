@@ -8,9 +8,9 @@ router.post('/registration', (req, res) => {
     const salt = bcrypt.genSaltSync(10)
     const password_hash = bcrypt.hashSync(password, salt)
     const sql = `INSERT INTO users (name, email, password) VALUES ('${name}', '${email}', '${password_hash}')`
-    pool.query(sql, err => {
+    db.run(sql, err => {
         if (err) {
-            if (err.code === 'ER_DUP_ENTRY') res.json({status: 'error', message: 'This user already exists'})
+            if (err.code === 'SQLITE_CONSTRAINT') res.json({status: 'error', message: 'This user already exists'})
             else res.end({status: 'error', message: 'Server error'})
         } else {
             const token = jwt.sign({ email, date: Date.now()}, keys.secret);
@@ -18,6 +18,7 @@ router.post('/registration', (req, res) => {
             res.json({status: 'ok', message: 'User was created'})
         }
     })
+
 })
 
 module.exports = router

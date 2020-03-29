@@ -14,7 +14,7 @@ router.get('/getUserAlbum', async (req, res) => {
                     WHERE email = '${email}'
                   )
                   ORDER BY r.date DESC`
-     pool.query(sql, (err, result) => {
+     db.all(sql, (err, result) => {
          if (err) res.end(JSON.stringify({status: 'error', message: 'user is not logged in'}))
          res.json(result)
      })

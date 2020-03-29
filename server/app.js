@@ -3,15 +3,8 @@ const bodyParser = require('body-parser')
 const fileUpload  = require('express-fileupload')
 global.keys = require('./keys')
 const app = express()
-const mysql = require('mysql2');
-
-global.pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    database: 'test',
-    password: '123456',
-    connectionLimit: 10
-});
+const sqlite3 = require('sqlite3').verbose();
+global.db = new sqlite3.Database('server/database.db');
 
 const registrationRouter = require('./routes/auth/registration')
 const loginRouter = require('./routes/auth/login')

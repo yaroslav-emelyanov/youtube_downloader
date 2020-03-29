@@ -1,12 +1,15 @@
 <template>
     <div class="album">
         <Popup v-if="popup_visible"/>
-        <Card v-for="(v, idx) of videos"
-              @removeRecord="removeRecord"
-              class="card"
-              :video="v"
-              :key="idx"
-        />
+        <p class="description" v-if="!videos.length">You have not uploaded any videos yet.</p>
+        <div v-else>
+            <Card v-for="(v, idx) of videos"
+                  @removeRecord="removeRecord"
+                  class="card"
+                  :video="v"
+                  :key="idx"
+            />
+        </div>
     </div>
 </template>
 
@@ -51,5 +54,12 @@
         grid-gap: 20px;
         max-width: 1300px;
         margin: 5vh auto 0;
+    }
+
+    .description {
+        color: white;
+        text-align: center;
+        grid-column-start: 1;
+        grid-column-end: 4;
     }
 </style>

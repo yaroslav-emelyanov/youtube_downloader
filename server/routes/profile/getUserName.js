@@ -15,10 +15,10 @@ router.get('/getUserName', (req, res) => {
         const {email} = jwt.verify(token, keys.secret)
 
         const sql = `SELECT name, downloads, avatar FROM users WHERE email = '${email}'`
-        pool.query(sql, (err, result) => {
+        db.get(sql, (err, result) => {
             if (err) res.end(JSON.stringify({status: 'error'}))
 
-            const {name, downloads, avatar} = result[0]
+            const {name, downloads, avatar} = result
             res.end(JSON.stringify({status: 'ok', user: {name, downloads, avatar}}))
         })
     } catch (e) {

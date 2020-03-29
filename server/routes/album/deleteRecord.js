@@ -9,7 +9,7 @@ router.delete('/deleteRecord', async (req, res) => {
     const { record_id } = req.body
 
     const sql = `DELETE FROM records WHERE id = ${record_id}`
-    pool.query(sql)
+    db.run(sql)
 })
 
 module.exports = router
