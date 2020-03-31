@@ -3,26 +3,36 @@ const jwt = require('jsonwebtoken')
 const cookie = require('cookieparser')
 const router = Router()
 
-router.get('/getUserName', (req, res) => {
+const User = require('../../models/User')
 
-    if (!req.headers.cookie) res.end(JSON.stringify({status: 'error'}))
+router.get('/getUserName', async (req, res) => {
+
+    if (!req.headers.cookie) {
+        res.end(JSON.stringify({status: 'error', message: 'User not registered'}))
+        return
+    }
 
     const parsed = cookie.parse(req.headers.cookie)
     const token = parsed.auth
-    if (!token) res.end(JSON.stringify({status: 'error'}))
+    if (!token) {
+        res.end(JSON.stringify({status: 'error', message: 'User not registered'}))
+        return
+    }
 
     try {
         const {email} = jwt.verify(token, keys.secret)
 
-        const sql = `SELECT name, downloads, avatar FROM users WHERE email = '${email}'`
-        db.get(sql, (err, result) => {
-            if (err) res.end(JSON.stringify({status: 'error'}))
+        const user = await User.findOne({email})
 
-            const {name, downloads, avatar} = result
-            res.end(JSON.stringify({status: 'ok', user: {name, downloads, avatar}}))
-        })
+        if (!user) {
+            res.end(JSON.stringify({status: 'error', message: 'User not registered'}))
+            return
+        }
+
+        const {name, downloads, avatar} = user
+        res.end(JSON.stringify({status: 'ok', user: {name, downloads, avatar}}))
     } catch (e) {
-        res.end(JSON.stringify({status: 'error'}))
+        res.end(JSON.stringify({status: 'error', message: 'User not registered'}))
     }
 })
 

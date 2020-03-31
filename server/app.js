@@ -3,8 +3,21 @@ const bodyParser = require('body-parser')
 const fileUpload  = require('express-fileupload')
 global.keys = require('./keys')
 const app = express()
-const sqlite3 = require('sqlite3').verbose();
-global.db = new sqlite3.Database('server/database.db');
+
+require('dotenv').config()
+
+const mongoose = require('mongoose');
+const URI = process.env.MONGO_DB_URI
+async function start() {
+    await mongoose.connect(URI, {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useUnifiedTopology: true,
+    });
+}
+
+start()
 
 const registrationRouter = require('./routes/auth/registration')
 const loginRouter = require('./routes/auth/login')

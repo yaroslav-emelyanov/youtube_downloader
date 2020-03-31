@@ -1,43 +1,35 @@
-function get_info_DB(sql) {
-    return new Promise((resolve, reject) => {
-        db.get(sql, (err, row) => {
-            if (err) reject(undefined)
-            resolve(row)
-        })
-    })
-}
+const User = require('../models/User')
+const Video = require('../models/Video')
+const Record = require('../models/Record')
 
+module.exports = async function (youtube_id, name, size, email) {
 
-module.exports = async function (youtube_id, title, size, email) {
-    const sql = `SELECT id FROM videos WHERE youtube_id = '${youtube_id}'`
-    //const promisePool = pool.promise();
-    const videoExist = await get_info_DB(sql)
-    // INCREMENT DOWNLOADS
-    const sql1 = `UPDATE users
-                  SET downloads = downloads + 1
-                  WHERE email = '${email}'`
-    await db.run(sql1)
+    const isVideoExist = await Video.findOne({youtube_id})
+    const user = await User.findOneAndUpdate({email}, {$inc: {downloads: 1}})
 
-    if (!videoExist) {
+    if (!isVideoExist) {
         const mega_bite = parseFloat((size/(1024 * 1024)).toFixed(1))
 
-        // ADD VIDEO ID
-        const sql1 = `INSERT INTO videos (youtube_id, name, size) VALUES ('${youtube_id}', '${title}', ${mega_bite})`
-        await db.run(sql1)
-        const sql2 = `SELECT id FROM videos WHERE youtube_id = '${youtube_id}'`
-        const {id} = await get_info_DB(sql2)
-        // CREATE RECORD
-        const sql3 = `INSERT INTO records (user_id, video_id) 
-                      VALUES ((SELECT id FROM users WHERE email = '${email}'), '${id}')`
-        db.run(sql3)
+        const video = new Video({youtube_id, name, size: mega_bite})
+        const videoData = await video.save()
 
-    } else {
-        const video_id = videoExist.id
-        // CREATE RECORD
-        const sql2 = `INSERT INTO records (user_id, video_id) 
-                  VALUES ((SELECT id FROM users WHERE email = '${email}'), '${video_id}')`
-        db.run(sql2, err => {
-            if (err && err.code !== 'SQLITE_CONSTRAINT') console.log('error', err.code)
+
+        const record = new Record({
+            user_id: user._id,
+            video_id: videoData._id
         })
+        await record.save()
+        return
     }
+
+    const video_id = isVideoExist._id
+    const record = new Record({
+        user_id: user._id,
+        video_id
+    })
+
+    record.save(err => {
+        if (err && err.code !== 11000) console.log(err)
+    })
+
 }

@@ -1,8 +1,8 @@
 <template>
-    <div class="album">
+    <div>
         <Popup v-if="popup_visible"/>
         <p class="description" v-if="!videos.length">You have not uploaded any videos yet.</p>
-        <div v-else>
+        <div class="album" v-else>
             <Card v-for="(v, idx) of videos"
                   @removeRecord="removeRecord"
                   class="card"
@@ -48,6 +48,7 @@
 </script>
 
 <style lang="scss" scoped>
+
     .album {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

@@ -78,7 +78,7 @@
 
 <style lang="scss">
     * {
-        font-family: Raleway;
+        font-family: Raleway, sans-serif;
         box-sizing: border-box;
     }
 
