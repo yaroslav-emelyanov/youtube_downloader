@@ -14,10 +14,7 @@
             ...mapMutations(['setResponse']),
             async updateName() {
                 if (!this.value) return
-                const res = await this.$axios
-                    .$put('http://localhost:3000/server/updateUserName', {
-                        name: this.value
-                    })
+                const res = await this.$axios.$put('/updateUserName', {name: this.value})
                 this.setResponse(res)
             }
         }

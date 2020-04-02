@@ -22,8 +22,7 @@
         middleware: 'auth',
         name: "Album",
         asyncData({$axios}) {
-            return $axios.$get('http://localhost:3000/server/getUserAlbum')
-                .then(videos => ({videos}))
+            return $axios.$get('/getUserAlbum').then(videos => ({videos}))
         },
         computed: {
             ...mapGetters(['popup_visible'])
@@ -55,6 +54,15 @@
         grid-gap: 20px;
         max-width: 1300px;
         margin: 5vh auto 0;
+        @media screen and (max-width: 1440px){
+            grid-template-columns: repeat(2, 1fr);
+            max-width: 800px;
+        }
+        @media screen and (max-width: 910px){
+            grid-template-columns: repeat(1, 1fr);
+            max-width: 440px;
+            padding: 0 20px;
+        }
     }
 
     .description {
@@ -63,4 +71,5 @@
         grid-column-start: 1;
         grid-column-end: 4;
     }
+
 </style>

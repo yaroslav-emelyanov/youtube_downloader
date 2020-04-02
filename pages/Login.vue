@@ -31,6 +31,7 @@
     import bcrypt from 'bcryptjs'
     export default {
         name: "Login",
+        middleware: ['afterAuth'],
         layout: 'empty',
         data: () => ({
            title: 'Login',

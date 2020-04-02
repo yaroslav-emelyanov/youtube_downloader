@@ -58,6 +58,11 @@
 </script>
 
 <style lang="scss" scoped>
+    .footer-wrapper {
+        display: flex;
+        padding-top: 30px;
+    }
+
     .choice-download {
         align-items: flex-start;
         color: #ffffff;
@@ -83,4 +88,34 @@
             }
         }
     }
+
+    @media screen and (max-width: 768px){
+        .footer-wrapper {
+            flex-direction: column-reverse;
+        }
+
+        .video {
+            width: 100%;
+            height: 320px;
+            margin-right: 0;
+        }
+
+        .choice-download {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            .choice-item {
+                margin-left: 20px;
+            }
+        }
+    }
+
+    @media screen and (max-width: 420px){
+
+        .video {
+            height: 200px;
+        }
+
+    }
+
 </style>

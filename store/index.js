@@ -13,63 +13,40 @@ export const state = () => ({
 export const actions = {
     async register ({commit}, user) {
         try {
-            const res = await fetch('http://localhost:3000/server/registration', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(user)
-            })
-            const json = await res.json()
-            commit('setResponse', json)
-            return json.status
+            const res = await this.$axios.$post('/registration', user)
+            commit('setResponse', res)
+            return res.status
         } catch (e) {
             console.log('Error: ', e)
         }
     },
     async login ({commit}, user) {
         try {
-            const res = await fetch('http://localhost:3000/server/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(user)
-            })
-            const json = await res.json()
-            commit('setResponse', json)
-            return json.status
+            const res = await this.$axios.$post('/login', user)
+            commit('setResponse', res)
+            return res.status
         } catch (e) {
             console.log('Error: ', e)
         }
     },
-    async download ({commit, getters}, video_id) {
-        const url = 'http://localhost:3000/server/download'
+    async download ({getters}, video_id) {
+        const { baseURL } = this.$axios.defaults
         const type = getters.current_choice_download
-        let response = await fetch(url, {
+        return await fetch(baseURL + '/download', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify({video_id, type})
         });
-        return response
     },
-    async delete ({commit}, record_id) {
-        const url = 'http://localhost:3000/server/deleteRecord'
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {'Content-Type': 'application/json;charset=utf-8'},
-            body: JSON.stringify({record_id})
-        })
+    delete ({commit}, record_id) {
+        this.$axios.$delete('/deleteRecord', {data: {record_id}})
     },
-    async get_detail_info ({commit, getters}) {
-        const id = getters.popup_id
-        const url = 'http://localhost:3000/server/getDetailInfo'
-        const query = `?id=${id}`
-        return await this.$axios.$get(url + query)
-    },
-    async set_avatar_url (ctx, src) {
-        const url = 'http://localhost:3000/server/setAvatarUrl'
+    async set_avatar_url ({commit}, src) {
         const query = `?url=${src}`
-        const response = await this.$axios.$get(url + query)
-        console.log(response);
+        const response = await this.$axios.$get('/setAvatarUrl' + query)
+        commit('setResponse', response)
     }
 }
 
@@ -107,4 +84,5 @@ export const getters = {
     persent_loading: s => s.persent_loading,
     choices: s => s.choices,
     popup_id: s => s.popup_id,
+    host: s => s.host
 }

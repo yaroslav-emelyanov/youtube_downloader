@@ -11,7 +11,7 @@ module.exports = {
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Raleway:400,900&display=swap'}
         ]
     },
-    loading: {color: '#3B8070'},
+    loading: {color: 'transparent'},
     build: {
         extend(config, {isDev, isClient}) {
             if (isDev && isClient) {
@@ -27,6 +27,11 @@ module.exports = {
     modules: [
         '@nuxtjs/axios'
     ],
+
+    axios: {
+      baseURL: (process.env.BASE_URL || 'http://localhost:3000') + '/server'
+    },
+
     plugins: [
         {src: '~plugins/animation', ssr: false},
         {src: '~plugins/vuelidate', ssr: true},

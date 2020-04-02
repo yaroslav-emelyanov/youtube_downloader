@@ -127,11 +127,6 @@
         margin: 0 auto;
     }
 
-    .footer-wrapper {
-        display: flex;
-        padding-top: 5vh;
-    }
-
     .mt-25 {
         margin-top: 25vh;
     }
@@ -230,6 +225,22 @@
                    fill: white;
                }
            }
+    }
+
+    @media screen and (max-width: 768px){
+        .mt-25 {
+            margin-top: 15vh;
+        }
+    }
+
+    @media screen and (max-width: 420px){
+        .container {
+            padding: 0 1em;
+        }
+
+        .mt-25 {
+            margin-top: 12.5vh;
+        }
     }
 </style>
 

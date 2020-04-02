@@ -124,6 +124,9 @@
             border-top-left-radius: inherit;
             border-top-right-radius: inherit;
             background: url('~@/assets/img/mock.jpg') center center/cover no-repeat;
+            @media screen and (max-width: 420px){
+                height: 45vw;
+            }
         }
         .content {
             padding: 0 1.5rem;

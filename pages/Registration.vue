@@ -41,6 +41,7 @@
     import {mapActions, mapMutations} from 'vuex'
     export default {
         name: "Register",
+        middleware: ['afterAuth'],
         layout: 'empty',
         data: () => ({
            title: 'Registration',

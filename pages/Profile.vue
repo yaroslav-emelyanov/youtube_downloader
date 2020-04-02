@@ -36,8 +36,8 @@
     export default {
         middleware: 'auth',
         name: "Profile",
-        asyncData ({$axios, redirect}) {
-            return $axios.$get('http://localhost:3000/server/getUserName')
+        asyncData ({ $axios, redirect }) {
+            return $axios.$get('/getUserName')
                 .then(({status, user}) => status === 'ok'
                     ? {user} : redirect('/login'))
         },
@@ -105,12 +105,8 @@
                 const data = new FormData();
                 data.append('image', img)
 
-                const response = await fetch('http://localhost:3000/server/setAvatar', {
-                     method: 'POST',
-                     body: data
-                 })
-                const json =  await response.json()
-                this.setResponse(json)
+                const response = await this.$axios.$post('/setAvatar', data)
+                this.setResponse(response)
                 this.currentInput = 'input-name'
                 this.$refs.input.value = ''
             }
@@ -271,6 +267,38 @@
 
     #file {
         display: none;
+    }
+
+
+    @media screen  and (max-width: 900px){
+        .container {
+            max-width: 500px;
+            padding: 0 1em;
+        }
+    }
+
+    @media screen  and (max-width: 580px){
+        .container {
+            flex-direction: column;
+            padding: 5em 1em 2em;
+            margin-top: 10vh;
+        }
+
+        .update {
+            width: 100%;
+        }
+
+        .logout {
+            right: 40px;
+        }
+
+        .profile {
+            margin-bottom: 30px;
+        }
+
+        .info {
+            bottom: 110%;
+        }
     }
 
 </style>
